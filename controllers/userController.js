@@ -11,7 +11,7 @@ module.exports = {
   },
   // get a single user by its _id and populated thought and friend data
   getUserById(req, res) {
-    User.findOne({ _id: req.params.userId })
+    User.findOne({ _id: req.params.id })
       .select("-__v")
       .populate("thoughts")
       .populate("friends")
