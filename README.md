@@ -15,7 +15,7 @@ This assignment was very helpful and helped me understand how Mongoose works. I 
 ## Usage
 
 Link to the repo: https://github.com/sveraleyva/socialNetwork
-Link to deployed app: https://drive.google.com/file/d/1cr_cJdMeeO7cA4CfCCS8wjEtiFi6u3dG/view
+Link to video: https://drive.google.com/file/d/1cr_cJdMeeO7cA4CfCCS8wjEtiFi6u3dG/view
 
 ## Credit
 
