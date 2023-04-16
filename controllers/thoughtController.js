@@ -3,7 +3,7 @@ const { Thought, User } = require("../models");
 module.exports = {
   getAllThoughts(req, res) {
     Thought.find()
-      .then((dbThoughtData) => res.json(dbThoughtData))
+      .then((posts) => res.json(posts))
       .catch((err) => {
         console.log(err);
         res.status(400).json(err);
@@ -22,26 +22,58 @@ module.exports = {
       });
   },
 
+  // createThought(req, res) {
+  //   console.log("req.body", req.body);
+  //   Thought.create(req.body)
+  //     .then(({ thought }) => {
+  //       let userId = req.body.userId;
+  //       return User.findOneAndUpdate(
+  //         { _id: userId },
+  //         { $push: { thoughts: thought._id } },
+  //         { new: true }
+  //       );
+  //     })
+  //     .then((userData) => {
+  //       console.log("userData", userData);
+  //       !userData
+  //         ? res.status(404).json({
+  //             message: "Thought created but no user found with this id!",
+  //           })
+  //         : res.json(userData);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //       res.status(500).json(err);
+  //     });
+  // },
+
   createThought(req, res) {
+    console.log("req.body", req.body);
     Thought.create(req.body)
-      .then(({ thought }) => {
+      .then((result) => {
+        console.log("result", result);
+        let userId = req.body.userId;
         return User.findOneAndUpdate(
-          { _id: req.params.userId },
-          { $push: { thoughts: thought._id } },
+          { _id: userId },
+          { $push: { thoughts: result._id } },
           { new: true }
         );
       })
-      .then((user) => {
-        !user
+      .then((userData) => {
+        console.log("userData", userData);
+        !userData
           ? res.status(404).json({
               message: "Thought created but no user found with this id!",
             })
-          : res.json(user);
+          : res.json(userData);
       })
-      .catch((err) => res.status(500).json(err));
+      .catch((err) => {
+        console.log("error:", err);
+        res.status(500).json(err);
+      });
   },
 
-  updateThough(req, res) {
+  updateThought(req, res) {
     Thought.findOneAndUpdate(
       { _id: req.body.userId },
       { runValidators: true, new: true }

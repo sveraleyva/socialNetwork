@@ -1,13 +1,16 @@
 const User = require("../models/User");
 
 module.exports = {
-  getUsers(req, res) {
+  getAllUsers(req, res) {
     User.find()
       .then((users) => res.json(users))
-      .catch((err) => res.status(500).json(err));
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json(err);
+      });
   },
   // get a single user by its _id and populated thought and friend data
-  getSingleUser(req, res) {
+  getUserById(req, res) {
     User.findOne({ _id: req.params.userId })
       .select("-__v")
       .populate("thoughts")
@@ -53,7 +56,21 @@ module.exports = {
   addFriend(req, res) {
     User.findOneAndUpdate(
       { _id: req.params.userId },
-      { $addToSet: { friends: req.params.friendId } },
+      { $push: { friends: req.params.friendId } },
+      { new: true }
+    )
+      .then((user) =>
+        !user
+          ? res.status(404).json({ message: "No user with that ID" })
+          : res.json(user)
+      )
+      .catch((err) => res.status(500).json(err));
+  },
+  // remove a friend from a user's friend list
+  deleteFriend(req, res) {
+    User.findOneAndUpdate(
+      { _id: req.params.userId },
+      { $pull: { friends: req.params.friendId } },
       { new: true }
     )
       .then((user) =>
