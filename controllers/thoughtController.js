@@ -97,13 +97,17 @@ module.exports = {
   // remove a reaction from a thought
   // /api/thoughts/:thoughtId/reactions
   removeReaction(req, res) {
-    Reaction.findOneAndDelete({ _id: req.body.reactionId })
-      // make sure the above can actually work, 1 hour limit and then just take the video and submit
-      // the only other thing I can think of is to change the route
-      .then((user) => {
-        !user
-          ? res.status(404).json({ message: "No thought with this id" })
-          : res.json(user);
+    // call on Thought because we are removing a reaction from a thought
+    Thought.findOneAndUpdate(
+      { _id: req.params.thoughtId },
+      { $pull: { reactions: { _id: req.body.reactionId } } },
+      { new: true }
+    )
+      .then((thought) => {
+        console.log("thought:", thought);
+        !thought
+          ? res.status(404).json({ message: "No thought with this id" }, err)
+          : res.json(thought);
       })
       .catch((err) => res.status(500).json(err));
   },
