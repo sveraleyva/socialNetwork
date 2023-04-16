@@ -52,24 +52,25 @@ module.exports = {
       )
       .catch((err) => res.status(500).json(err));
   },
-  // add a new friend to a user's friend list
+  // add a new friend to a user's friend list. the friend needs to be another registered user
   addFriend(req, res) {
     User.findOneAndUpdate(
-      { _id: req.params.id },
+      { _id: req.params.userId },
       { $push: { friends: req.params.friendId } },
       { new: true }
     )
-      .then((user) =>
+      .then((user) => {
+        console.log("user", user);
         !user
           ? res.status(404).json({ message: "No user with that ID" })
-          : res.json(user)
-      )
+          : res.json(user);
+      })
       .catch((err) => res.status(500).json(err));
   },
   // remove a friend from a user's friend list
   deleteFriend(req, res) {
     User.findOneAndUpdate(
-      { _id: req.params.id },
+      { _id: req.params.userId },
       { $pull: { friends: req.params.friendId } },
       { new: true }
     )
