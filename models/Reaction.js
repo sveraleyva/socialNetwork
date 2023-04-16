@@ -1,6 +1,5 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
-const dateFormat = require("../utils/dateFormat");
+const { Schema, mongoose } = require("mongoose");
+const moment = require("moment");
 
 const reactionSchema = new Schema(
   {
@@ -13,17 +12,21 @@ const reactionSchema = new Schema(
       required: true,
       maxLength: 280,
     },
-    username: [{ type: String, required: true }],
-    createdAt: [
-      {
-        type: Date,
-        default: Date.now,
-        get: (timestamp) => dateFormat(timestamp),
+    username: {
+      type: String,
+      required: true,
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+      get: function (timestamp) {
+        return moment(timestamp).format("YYYY-MM-DD");
       },
-    ],
+    },
   },
   {
     toJSON: {
+      virtuals: true,
       getters: true,
     },
     id: false,

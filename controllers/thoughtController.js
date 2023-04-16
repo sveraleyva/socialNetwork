@@ -1,4 +1,8 @@
 const { Thought, User } = require("../models");
+const mongoose = require("mongoose");
+const reactionSchema = require("../models/Reaction");
+
+const Reaction = mongoose.model("Reaction", reactionSchema);
 
 module.exports = {
   // get all thoughts
@@ -59,9 +63,43 @@ module.exports = {
       })
       .catch((err) => res.status(500).json(err));
   },
-
+  // deletes a thought by id
   deleteThought(req, res) {
     Thought.findOneAndDelete({ _id: req.params.id })
+      .then((user) => {
+        !user
+          ? res.status(404).json({ message: "No thought with this id" })
+          : res.json(user);
+      })
+      .catch((err) => res.status(500).json(err));
+  },
+  // add a reaction to a thought
+  addReaction(req, res) {
+    const { reactionBody, username } = req.body;
+    const newReaction = { reactionBody, username };
+
+    Thought.findOneAndUpdate(
+      { _id: req.params.thoughtId },
+      { $push: { reactions: newReaction } },
+      { new: true, runValidators: true }
+    )
+      .then((thought) => {
+        if (!thought) {
+          return res.status(404).json({ message: "No thought with this id" });
+        }
+        res.json(thought);
+      })
+      .catch((err) => {
+        console.log("error:", err);
+        res.status(500).json(err);
+      });
+  },
+  // remove a reaction from a thought
+  // /api/thoughts/:thoughtId/reactions
+  removeReaction(req, res) {
+    Reaction.findOneAndDelete({ _id: req.body.reactionId })
+      // make sure the above can actually work, 1 hour limit and then just take the video and submit
+      // the only other thing I can think of is to change the route
       .then((user) => {
         !user
           ? res.status(404).json({ message: "No thought with this id" })

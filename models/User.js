@@ -26,7 +26,7 @@ const userSchema = new Schema(
   }
 );
 
-//retrieves the length of the user's freidns array on query
+// // retrieves the length of the user's freidns array on query
 // userSchema.virtual("friendCount").get(function () {
 //   return this.friends.length();
 // });

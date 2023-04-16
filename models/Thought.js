@@ -1,17 +1,23 @@
 const { Schema, model } = require("mongoose");
-// const dateFormat = require("../utils/dateFormat");
-// const reactionSchema = require("./Reaction");
+const reactionSchema = require("./Reaction");
+const moment = require("moment");
 
 const thoughtSchema = new Schema(
   {
     thoughtText: { type: String, required: true, minLength: 1, maxLength: 280 },
-    createdAt: { type: Date, default: Date.now },
-    // note to self: you kind of went against the class code, so if something fails, look here lol
-    username: { type: String, required: false },
-    // reactions: [{ type: Schema.Types.ObjectId, ref: "Reaction" }],
+    createdAt: {
+      type: Date,
+      default: Date.now,
+      get: function (timestamp) {
+        return moment(timestamp).format("YYYY-MM-DD");
+      },
+    },
+    username: { type: String, required: true },
+    reactions: [reactionSchema],
   },
   {
     toJSON: {
+      getters: true,
       virtuals: true,
     },
     id: false,
