@@ -1,0 +1,26 @@
+{
+  "name": "socialnetwork",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sveraleyva/socialNetwork.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^6.0.13"
+  },
+  "bugs": {
+    "url": "https://github.com/sveraleyva/socialNetwork/issues"
+  },
+  "homepage": "https://github.com/sveraleyva/socialNetwork#readme"
+}
